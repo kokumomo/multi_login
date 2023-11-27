@@ -1,35 +1,75 @@
-# 6. Laravelのインストール
-    
-composer create-project laravel/laravel umarche "8.*" --prefer-dist
+# 12. Laravel Breeze
 
-cd umarche  
-php artisan serve  
-もしDB接続できなかったら  
-https://coinbaby8.com/access_denied.html
-  
-  
-# 7. DB設定、マイグレート
+### Larevel Breeze インストール
+composer require laravel/breeze "1.*" --dev
 
-### 初期設定
-Mysql DB作成  
-DB_SOCKET=/Applications/MAMP/tmp/mysql/mysql.sock を.envに追加  
-php artisan migrate  
-タイムゾーン、言語設定 config/app.php  
-.env 設定(環境ファイル)  
-バリデーションの言語ファイル  
-デバッグバー  
+php artisan breeze:install  
+npm install && npm run dev
 
-# 9. 初期設定
+マニュアル: スターターキット
+
+
+# 13. 表示がおかしくなったら
 ```php
-タイムゾーン、言語設定 config/app.php  
-'timexone' => 'Asia/Tokyo',
-'locale' => 'ja',
+resources/views/layouts/app.blade.phpにコードの書き換え
+resources/views/layouts/guest.blade.phpにコードの書き換え
+ <!-- Styles -->
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}" defer></script>
 ```
 
-デバッグバー
-composer require barryvdh/laravel-debugbar
 
-うまくいかない時・・キャッシュのクリア
-php artisan config:clear
-php artisan cache:clear
-    
+# 15. 表示の流れ、ルーティング
+
+![img](public/img/01_27.png)
+ミドルウェアでログインしているかどうか認証
+
+```php
+use Illuminate\Support\Dacades\Route; //Routeを読み込む
+use App\Http\Controllers\Auth\RegisteredUserController; //コントローラを読み込む
+
+Route::get('/register', //Route::getかpost(url))
+[RegisteredUserController::class,'create']) //[]でコントローラ名、メソッド名
+->middleware('guest') //middleware guestだったら
+->name('register'); //名前付きルート
+```
+
+マニュアル: 認証
+->ルートの保護、リダイレクト、ガードの指定、ログイン回数制限
+
+
+# 16. ルート->コントローラ->ビュー
+
+```php
+コントローラファイル群
+app/Http/Controllers/Auth
+
+authenticatedSession //認証セッション
+confirmablePassword //パスワード確認
+emailVerificationNotification //メール検証通知
+emailVerificationPrompt //メール検証プロンプト
+newPassword //新しいパスワード
+passwordResetLink //パスワードセットリンク
+registeredUser //ユーザー登録
+verifyEmail //メール検証
+
+ビューファイル群
+Resources/views/auth
+
+confirm-password //パスワード確認
+forget-password //パスワード忘れ
+login //ログイン
+register //新規登録
+reset-password //パスワードリセット
+verify-email //メール検証
+```
+
+
+# 17. 日本語化対応
+
+### Laravel Breeze 日本語化
+マニュアル下部の4つの言語ファイルをresource/lang/jaフォルダは以下に配置
+(*Laravel9の場合は lang/jaフォルダ)
+(Laravel10hはLangディレクトリがデフォルトで存在せず、自分で作成する必要があります。php artisan lang:publish)
