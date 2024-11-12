@@ -1,3 +1,8 @@
-<img src="{{ asset('img/ibuki1.jpeg') }}" alt="">
-<img src="{{ asset('img/ibuki2.jpeg') }}" alt="">
-<img src="{{ asset('img/ibuki3.jpeg') }}" alt="">
+<x-tests.app>
+  <x-slot name="header">ヘッダー</x-slot>
+  テスト
+
+  <x-tests.card title="タイトル" content="コンテンツ" :message="$message"/>
+</x-tests.app>
+
+

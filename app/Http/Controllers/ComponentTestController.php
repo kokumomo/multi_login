@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class ComponentTestController extends Controller
 {
     public function showComponent(){
-        return view('tests.component-test');
+        $message = 'メッセージ';
+        return view('tests.component-test', compact('message'));
     }
 }
