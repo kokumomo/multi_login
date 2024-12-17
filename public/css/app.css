@@ -812,6 +812,9 @@ select {
 .mt-8 {
   margin-top: 2rem;
 }
+.mt-32 {
+  margin-top: 8rem;
+}
 .block {
   display: block;
 }
@@ -856,6 +859,9 @@ select {
 }
 .w-1\/2 {
   width: 50%;
+}
+.w-1\/4 {
+  width: 25%;
 }
 .w-10 {
   width: 2.5rem;
@@ -950,6 +956,9 @@ select {
 }
 .flex-col {
   flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
 }
 .items-center {
   align-items: center;
@@ -1643,6 +1652,10 @@ select {
 
   .md\:border-t-0 {
     border-top-width: 0px;
+  }
+
+  .md\:p-4 {
+    padding: 1rem;
   }
 
   .md\:p-6 {
