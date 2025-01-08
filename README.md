@@ -1,1 +1,1 @@
-composer require intervention/image:^2
+84. フォームリクエストでバリデーションをかける
