@@ -45,6 +45,6 @@ class Owner extends Authenticatable
 
     public function image()
     {
-        return $thil->hasMany(Image::class);
+        return $this->hasMany(Image::class);
     }
 }
