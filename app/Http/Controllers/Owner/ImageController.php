@@ -29,6 +29,7 @@ class ImageController extends Controller
             return $next($request);
         });
     }
+    
     public function index()
     {
         $images = Image::where('owner_id', Auth::id())->orderBy('updated_at', 'desc')->paginate(20);
