@@ -17,7 +17,7 @@ class ImageSeeder extends Seeder
         DB::table('images')->insert([
             [
                 'owner_id' => 1,
-                'filename' => 'fine_gold.png',
+                'filename' => 'smart_i_gold.png',
                 'title' => null
             ],
             [
@@ -38,6 +38,16 @@ class ImageSeeder extends Seeder
             [
                 'owner_id' => 1,
                 'filename' => 'picte_gold.png',
+                'title' => null
+            ],
+            [
+                'owner_id' => 1,
+                'filename' => 'state_street_gold.png',
+                'title' => null
+            ],
+            [
+                'owner_id' => 1,
+                'filename' => 'smt_gold.png',
                 'title' => null
             ],
             [
