@@ -28,5 +28,6 @@ Route::middleware('auth:users')->group(function () {
 // })->middleware(['auth:users'])->name('dashboard');
 
 Route::get('/component-test', [ComponentTestController::class, 'showComponent']);
+Route::get('show/{item}', [ItemController::class, 'show'])->name('items.show');
 
 require __DIR__.'/auth.php';
