@@ -21,7 +21,6 @@ class CartController extends Controller
         foreach ($products as $product) {
             $totalPrice += $product->price * $product->pivot->quantity;
         }
-        // dd($products, $totalPrice);
 
         return view('user.cart', compact('products', 'totalPrice'));
     }
@@ -68,95 +67,45 @@ class CartController extends Controller
                 return redirect()->route('user.cart.index');
             } else {
                 $lineItem = [
-                    'name' => $product->name,
-                    'description' => $product->information,
-                    'amount' => $product->price,
-                    'currency' => 'jpy',
+                    'price_data' => [
+                        'unit_amount' => $product->price,
+                        'currency' => 'JPY',
+
+                        'product_data' => [
+                            'name' => $product->name,
+                            'description' => $product->information,
+                        ],
+                    ],
                     'quantity' => $product->pivot->quantity,
+
+
                 ];
                 array_push($lineItems, $lineItem);
             }
-            // $quantity = '';
-            // $quantity = Stock::where('product_id', $product->id)
-            // ->sum('quantity');
 
-            // if($product->pivot->quantity > $quantity){
-            //     return redirect()->route('user.cart.index');
-            // }else{
-            //     $price_data = ([
-            //         'unit_amount' => $product->price,
-            //         'currency' => 'jpy',
-            //         'product_data' => $product_data = ([
-            //             'name' => $product->name,
-            //             'description' => $product->information,
-            //         ]),
-            //     ]);
+            foreach ($products as $product) {
+                Stock::create([
+                    'product_id' => $product->id,
+                    'type' => \Constant::PRODUCT_LIST['reduce'],
+                    'quantity' => $product->pivot->quantity * -1
+                ]);
+            }
 
-            // $lineItem = [
-            //     'name' => $product->name,
-            //     'description' => $product->information,
-            //     'unit_amount' => $product->price,
-            //     // 'price_data' => $price_data,
-            //     'currency' => 'jpy',
-            //     'quantity' => $product->pivot->quantity,
-            // ];
-            // array_push($lineItems, $lineItem);
-        }
-        // dd($lineItems);
-        foreach($products as $product){
-            Stock::create([
-                'product_id' => $product->id,
-                'type' => \Constant::PRODUCT_LIST['reduce'],
-                'quantity' => $product->pivot->quantity * -1
+            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+            $session = \Stripe\Checkout\Session::create([
+                'line_items' => [$lineItems],
+                'mode' => 'payment',
+                'success_url' => route('user.items.index') . '/success.html',
+                'cancel_url' => route('user.cart.index') . '/cancel.html',
             ]);
+
+            $publicKey = env('STRIPE_PUBLIC_KEY');
+
+            return view(
+                'user.checkout',
+                compact('session', 'publicKey')
+            );
         }
-
-        dd('test');
-// 
-
-
-
-
-
-
-
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
-        $session = \Stripe\Checkout\Session::create([
-            'line_items' => [$lineItems],
-            'mode' => 'payment',
-            'success_url' => route('user.items.index') . '/success.html',
-            'cancel_url' => route('user.cart.index') . '/cancel.html',
-        ]);
-
-        $publicKey = env('STRIPE_PUBLIC_KEY');
-
-        return view(
-            'user.checkout',
-            compact('session', 'publicKey')
-        );
     }
-
-    //     foreach($products as $product){
-    //         Stock::create([
-    //             'product_id' => $product->id,
-    //             'type' => \Constant::PRODUCT_LIST['reduce'],
-    //             'quantity' => $product->pivot->quantity * -1
-    //         ]);
-    //     }
-
-    //     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-    // $session = \Stripe\Checkout\Session::create([ 
-    //         'payment_method_types' => ['card'],
-    //         'line_items' => [[$lineItems]],
-    //         'mode' => 'payment',
-    //         'success_url' => route('user.items.index'),
-    //         'cancel_url' => route('user.cart.index'),
-    // ]);
-
-    //     $publicKey = env('STRIPE_PUBLIC_KEY');
-
-    //     return view('user.checkout', compact('session', 'publicKey'));
-
 }
-// }
