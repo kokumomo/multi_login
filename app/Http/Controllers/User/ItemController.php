@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
 use App\Jobs\SendThanksMail;
+use App\Services\CartService;
 
 class ItemController extends Controller
 {
