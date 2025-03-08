@@ -61,6 +61,10 @@ class CartController extends Controller
         ////
         $items = Cart::where('user_id', Auth::id())->get();
         $products = CartService::getItemsInCart($items);
+        $user = User::findOrFail(Auth::id());
+
+        SendThanksMail::dispatch($products, $user);
+        dd('ユーザーメール送信テスト');
         ////
 
         $user = User::findOrFail(Auth::id());
